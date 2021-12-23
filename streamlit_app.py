@@ -5,8 +5,6 @@ import streamlit as st
 import tensorflow as tf
 from paddleocr import draw_ocr, PaddleOCR
 
-
-st.markdown("<h1 style='text-align: center; color: black;'>OCR</h1>", unsafe_allow_html=True)
 @st.cache
 
 def get_model(lang):
@@ -94,4 +92,5 @@ def main():
 
 
 if __name__ == '__main__':
+    st.markdown("<h1 style='text-align: center; color: black;'>OCR</h1>", unsafe_allow_html=True)
     main()
