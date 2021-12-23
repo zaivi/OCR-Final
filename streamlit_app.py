@@ -1,4 +1,5 @@
-import numpy as np
+import io
+import base64
 from PIL import Image
 import streamlit as st
 import tensorflow as tf
@@ -60,35 +61,36 @@ def select_image():
     image = st.file_uploader("Upload your image here", type=['jpg','jpeg','png'])
     return image
 
-def show_image(image, boxes, txts, scores, font, save_image):
+def get_image_download_link(img,filename,text):
+    buffered = io.BytesIO()
+    img.save(buffered, format="png")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    href =  f'<a href="data:file/txt;base64,{img_str}" download="{filename}">{text}</a>'
+    return href
+
+def show_image(image, boxes, txts, scores, font):
     st.image(image)
     im_show = draw_ocr(image, boxes, txts, scores, font_path=f'./fonts/{font}')
     im_show = Image.fromarray(im_show)
-    if save_image:
-        im_show.save('result.jpg')  
     st.image(im_show)
+    st.sidebar.markdown(get_image_download_link(im_show,'image.png','Download '+'image.png'), unsafe_allow_html=True)
 
 def main():
     lang = select_language()
     image = select_image()
 
-    st.sidebar.header('Configuration')
-    outputsize = st.sidebar.selectbox('Output Size', [384,512,768])
-    save_image = st.sidebar.checkbox('Save image',value=True) 
+    st.sidebar.header('Save image')
 
     if image is not None:
         image = image.read()
         image = tf.image.decode_image(image, channels=3).numpy()
         ocr, font = get_model(lang)
-        # image = tf.image.resize(image, 
-        #                 [outputsize, outputsize],
-        #                 method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-        # image =  image.numpy()
         result = ocr.ocr(image, cls=True)
         boxes = [line[0] for line in result]
         txts = [line[1][0] for line in result]
         scores = [line[1][1] for line in result]
-        show_image(image, boxes, txts, scores, font, save_image)
+        show_image(image, boxes, txts, scores, font)
+
 
 if __name__ == '__main__':
     main()
