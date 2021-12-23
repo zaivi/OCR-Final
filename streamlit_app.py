@@ -1,6 +1,3 @@
-import os
-os.system('pip install paddlepaddle')
-os.system('pip install paddleocr')
 import numpy as np
 from PIL import Image
 import streamlit as st
