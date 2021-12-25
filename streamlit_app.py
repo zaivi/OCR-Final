@@ -47,16 +47,14 @@ def get_model(lang):
     elif lang == 'Italian':
         ocr = PaddleOCR(use_angle_cls=True, lang='it')
         return ocr, 'latin.ttf'
-    elif lang == 'Viet Nam':
-        ocr = PaddleOCR(use_angle_cls=True, lang='vi')
-        return ocr, 'arial.ttf'
+
 
 def select_language():
     option = st.selectbox(
         'Choose language',
         ('Arabic', 'Welsh', 'Hindi', 'Nepali', 'Spanish', 'Tamil', \
         'English', 'Chinese', 'Korean', 'Japan', 'French', \
-        'German', 'Italian', 'Viet Nam'))
+        'German', 'Italian'))
     return option
 
 def select_image():
