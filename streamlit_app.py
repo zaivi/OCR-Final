@@ -46,7 +46,7 @@ def get_model(lang):
         return ocr, 'german.ttf'
     elif lang == 'Italian':
         ocr = PaddleOCR(use_angle_cls=True, lang='it')
-        return ocr, 'latin.ttf'
+        return ocr, 'arial.ttf'
 
 
 def select_language():
